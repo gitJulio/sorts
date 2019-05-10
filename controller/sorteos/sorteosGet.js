@@ -123,6 +123,16 @@ exports.sorteosGet = async function(req, res, next) {
 
   })
 
+  /*Peticion
+    localhost:7000/api/sorteosGet
+    {
+  	"opcion":4,
+  	"contarC":2,
+  	"ordenarSiguiente":0,
+  	"anio":2002,
+  	"ordenar":3
+    }
+  fin peticion*/
   if (req.body.opcion == 1) {
     if (req.body.ordenarSiguiente == 1) {
       res.send(ver.sort(comparar));
