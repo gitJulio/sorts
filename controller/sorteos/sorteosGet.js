@@ -142,13 +142,21 @@ exports.sorteosGet = async function(req, res, next) {
   }
   if (req.body.opcion == 4) {
     if (req.body.ordenarSiguiente == 1) {
-      res.send(numeroSiguiente.sort(comparar))
+      res.send({
+        cantidad_jugadas: numeroSiguiente.length,
+        numeros_siguientes: numeroSiguiente.sort(comparar)
+      })
     } else {
-      res.send(numeroSiguiente)
+      res.send({
+        cantidad_jugadas: numeroSiguiente.length,
+        numeros_siguientes: numeroSiguiente
+      })
     }
   }
   if (req.body.opcion == 5) {
-    res.send(sorteos)
+    res.send({
+      sorteos
+    })
   }
 
 
