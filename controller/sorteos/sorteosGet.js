@@ -22,15 +22,9 @@ exports.sorteosGet = async function(req, res, next) {
   var secuencia2 = 0;
   var secuencia3 = 0;
   var secuencia4 = 0;
-
+  var sorteos;
   var ver = [];
-  NOMBRE_ARCHIVO = "/archivo.txt";
 
-  let lector = readline.createInterface({
-    input: fs.createReadStream(NOMBRE_ARCHIVO)
-  });
-
-  let sorteos;
   sorteos =
     await pg.func('trach.get_sorteos_resultados', [req.body.anio, Number(req.body.ordenar)]).catch(err => {
       res.status(500).send({
@@ -152,6 +146,9 @@ exports.sorteosGet = async function(req, res, next) {
     } else {
       res.send(numeroSiguiente)
     }
+  }
+  if (req.body.opcion == 5) {
+    res.send(sorteos)
   }
 
 
