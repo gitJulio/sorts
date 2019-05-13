@@ -25,8 +25,9 @@ exports.sorteosGet = async function(req, res, next) {
   var sorteos;
   var ver = [];
 
+  console.log(JSON.stringify(req.body.comparar_anios));
   sorteos =
-    await pg.func('trach.get_sorteos_resultados', [req.body.anio, Number(req.body.ordenar)]).catch(err => {
+    await pg.func('trach.get_sorteos_resultados', [req.body.anio, Number(req.body.ordenar), JSON.stringify(req.body.comparar_anios)]).catch(err => {
       res.status(500).send({
         error: err,
         status: 500
@@ -120,12 +121,16 @@ exports.sorteosGet = async function(req, res, next) {
   /*Peticion
     localhost:7000/api/sorteosGet
     {
-  	"opcion":4,
-  	"contarC":2,
-  	"ordenarSiguiente":0,
-  	"anio":2002,
-  	"ordenar":3
-    }
+	"opcion":4,
+	"contarC":1,
+	"ordenarSiguiente":1,
+	"anio":2002,
+	"ordenar":1,
+	"comparar_anios":{
+		      "anio1":2002,
+		      "anio2":2003
+	}
+}
   fin peticion*/
   if (req.body.opcion == 1) {
     if (req.body.ordenarSiguiente == 1) {
