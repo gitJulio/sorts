@@ -27,6 +27,8 @@ exports.sorteosGet = async function(req, res, next) {
   var siguientes_compara = [];
   var anio = 0;
 
+  var anioLista1 = []
+  var anioLista2 = []
 
   sorteos =
     await pg.func('trach.get_sorteos_resultados', [req.body.anio, Number(req.body.ordenar), JSON.stringify(req.body.comparar_anios)]).catch(err => {
@@ -47,23 +49,24 @@ exports.sorteosGet = async function(req, res, next) {
 
   var cuenta = 0;
 
-
+  // console.log(req.body.comparar_anios.anio2);
 
   sorteos.forEach(item => {
     cuenta++;
     arrayResultado = item.resultado.split("-").map(String);
     arrayResultado.sort(comparar);
 
-
     arrayResultado.forEach(item2 => {
-
       contador++;
-
-      if (verificaSiguiente != 0) {
-        numeroSiguiente.push(item2)
+      if (verificaSiguiente != 0 && item.anio == req.body.comparar_anios.anio1) {
+        anioLista1.push(item2)
         verificaSiguiente = 0;
       }
 
+      if (verificaSiguiente != 0 && item.anio == req.body.comparar_anios.anio2) {
+        anioLista2.push(item2)
+        verificaSiguiente = 0;
+      }
 
       if (item2 == req.body.contarC) {
         verificaSiguiente = item;
@@ -98,13 +101,6 @@ exports.sorteosGet = async function(req, res, next) {
       }
     }) /*Fin foreach arrayResultado*/
     //
-    if (anio != item.anio) {
-      // console.log(anio + " - - " + item.anio + " - " + cuenta);
-      siguientes_compara.push({
-        anio: item.anio,
-        numeros: numeroSiguiente
-      })
-    }
 
 
     ver.push(devuelveResultadosSorteos)
@@ -157,7 +153,11 @@ exports.sorteosGet = async function(req, res, next) {
     }
   }
   if (req.body.opcion == 2) {
-    res.send(tipo);
+    if (req.body.ordenarSiguiente == 1) {
+      res.send(tipo.sort(comparar));
+    } else {
+      res.send(tipo);
+    }
   }
   if (req.body.opcion == 3) {
     res.send(secuencia);
@@ -165,16 +165,33 @@ exports.sorteosGet = async function(req, res, next) {
   if (req.body.opcion == 4) {
     if (req.body.ordenarSiguiente == 1) {
       res.send({
-        cantidad_jugadas: numeroSiguiente.length,
-        numeros_siguientes: numeroSiguiente.sort(comparar)
+        cantidad_jugadas: anioLista1.length + anioLista2.length,
+        numeros_siguientes: [{
+            cantidad_anual: anioLista1.length,
+            anio: req.body.comparar_anios.anio1,
+            numeros: anioLista1.sort(comparar)
+          },
+          {
+            cantidad_anual: anioLista2.length,
+            anio: req.body.comparar_anios.anio2,
+            numeros: anioLista2.sort(comparar)
+          }
+        ]
       })
     } else {
       res.send({
-        cantidad_jugadas: numeroSiguiente.length,
+        cantidad_jugadas: anioLista1.length + anioLista2.length,
         numeros_siguientes: [{
-          // anio: siguientes_compara,
-          numeros: siguientes_compara
-        }]
+            cantidad_anual: anioLista1.length,
+            anio: req.body.comparar_anios.anio1,
+            numeros: anioLista1
+          },
+          {
+            cantidad_anual: anioLista2.length,
+            anio: req.body.comparar_anios.anio2,
+            numeros: anioLista2
+          }
+        ]
       })
     }
   }
