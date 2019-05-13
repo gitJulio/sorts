@@ -24,8 +24,10 @@ exports.sorteosGet = async function(req, res, next) {
   var secuencia4 = 0;
   var sorteos;
   var ver = [];
+  var siguientes_compara = [];
+  var anio = 0;
 
-  console.log(JSON.stringify(req.body.comparar_anios));
+
   sorteos =
     await pg.func('trach.get_sorteos_resultados', [req.body.anio, Number(req.body.ordenar), JSON.stringify(req.body.comparar_anios)]).catch(err => {
       res.status(500).send({
@@ -43,52 +45,67 @@ exports.sorteosGet = async function(req, res, next) {
     return a - b;
   }
 
+  var cuenta = 0;
+
+
+
   sorteos.forEach(item => {
+    cuenta++;
     arrayResultado = item.resultado.split("-").map(String);
     arrayResultado.sort(comparar);
 
-    arrayResultado.forEach(item => {
-      // console.log(item);
+
+    arrayResultado.forEach(item2 => {
+
       contador++;
 
       if (verificaSiguiente != 0) {
-        // console.log(item);
-        numeroSiguiente.push(item)
+        numeroSiguiente.push(item2)
         verificaSiguiente = 0;
       }
 
-      if (item == req.body.contarC) {
+
+      if (item2 == req.body.contarC) {
         verificaSiguiente = item;
       }
 
       if (contador == 1) {
-        devuelveResultadosSorteos = devuelveResultadosSorteos + item;
+        devuelveResultadosSorteos = devuelveResultadosSorteos + item2;
       } else {
-        devuelveResultadosSorteos = devuelveResultadosSorteos + '-' + item;
+        devuelveResultadosSorteos = devuelveResultadosSorteos + '-' + item2;
       }
 
-      if (item % 2 == 1) {
+      if (item2 % 2 == 1) {
         contadorImpar++;
       } else {
         contadorPar++;
       }
 
-      if (item < 9) {
+      if (item2 < 9) {
         secuencia1++;
       }
 
-      if (item > 9 && item < 20) {
+      if (item2 > 9 && item < 20) {
         secuencia2++;
       }
 
-      if (item > 19 && item < 30) {
+      if (item2 > 19 && item < 30) {
         secuencia3++;
       }
 
-      if (item > 29) {
+      if (item2 > 29) {
         secuencia4++;
       }
     }) /*Fin foreach arrayResultado*/
+    //
+    if (anio != item.anio) {
+      // console.log(anio + " - - " + item.anio + " - " + cuenta);
+      siguientes_compara.push({
+        anio: item.anio,
+        numeros: numeroSiguiente
+      })
+    }
+
 
     ver.push(devuelveResultadosSorteos)
     /******************TIPO**********/
@@ -154,7 +171,10 @@ exports.sorteosGet = async function(req, res, next) {
     } else {
       res.send({
         cantidad_jugadas: numeroSiguiente.length,
-        numeros_siguientes: numeroSiguiente
+        numeros_siguientes: [{
+          // anio: siguientes_compara,
+          numeros: siguientes_compara
+        }]
       })
     }
   }
