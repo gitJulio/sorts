@@ -27,6 +27,9 @@ exports.sorteosGet = async function(req, res, next) {
   var siguientes_compara = [];
   var anio = 0;
 
+  var contarProximo=0;
+  var jugadasEntre=[]
+
   var anioLista1 = []
   var anioLista2 = []
 
@@ -199,6 +202,19 @@ exports.sorteosGet = async function(req, res, next) {
     res.send({
       sorteos
     })
+  }
+
+  if (req.body.opcion == 6) {
+    sorteos.forEach(item=>{
+    contarProximo++;
+    if((item.resultado.includes(String(req.body.contarPoximo)))==true){
+      jugadasEntre.push((contarProximo-1))
+      contarProximo=0;
+    }
+    })
+
+    console.log(jugadasEntre);
+    res.send(jugadasEntre);
   }
 
 
