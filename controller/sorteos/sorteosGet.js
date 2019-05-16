@@ -137,14 +137,16 @@ exports.sorteosGet = async function(req, res, next) {
   /*Peticion
     localhost:7000/api/sorteosGet
     {
-	"opcion":4,
+	"opcion":6,
 	"contarC":1,
+	"contarPoximo":"29",
+	"jugada":1729,
 	"ordenarSiguiente":1,
-	"anio":2002,
+	"anio":2,
 	"ordenar":1,
 	"comparar_anios":{
-		      "anio1":2002,
-		      "anio2":2003
+		      "anio1":2018,
+		      "anio2":0
 	}
 }
   fin peticion*/
@@ -206,11 +208,15 @@ exports.sorteosGet = async function(req, res, next) {
 
   if (req.body.opcion == 6) {
     sorteos.forEach(item=>{
-    contarProximo++;
-    if((item.resultado.includes(String(req.body.contarPoximo)))==true){
-      jugadasEntre.push((contarProximo-1))
-      contarProximo=0;
-    }
+      if (item.numero<=req.body.jugada) {
+        console.log(item.numero);
+        contarProximo++;
+        if((item.resultado.includes(String(req.body.contarPoximo)))==true){
+          jugadasEntre.push((contarProximo-1))
+          contarProximo=0;
+        }
+      }
+
     })
 
     console.log(jugadasEntre);
