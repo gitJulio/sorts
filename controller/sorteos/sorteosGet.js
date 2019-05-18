@@ -139,13 +139,13 @@ exports.sorteosGet = async function(req, res, next) {
     {
 	"opcion":6,
 	"contarC":1,
-	"contarPoximo":"29",
-	"jugada":1729,
+	"contarPoximo":"33",
+	"jugada":1766,
 	"ordenarSiguiente":1,
 	"anio":2,
 	"ordenar":1,
 	"comparar_anios":{
-		      "anio1":2018,
+		      "anio1":2019,
 		      "anio2":0
 	}
 }
