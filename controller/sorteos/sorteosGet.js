@@ -27,12 +27,14 @@ exports.sorteosGet = async function(req, res, next) {
   var siguientes_compara = [];
   var anio = 0;
 
-  var contarProximo=0;
-  var jugadasEntre=[]
+  var contarProximo = 0;
+  var jugadasEntre = []
 
   var anioLista1 = []
   var anioLista2 = []
 
+  var resultadoSiguiente = [];
+  var contadorSiguiente = 0;
   sorteos =
     await pg.func('trach.get_sorteos_resultados', [req.body.anio, Number(req.body.ordenar), JSON.stringify(req.body.comparar_anios)]).catch(err => {
       res.status(500).send({
@@ -207,13 +209,13 @@ exports.sorteosGet = async function(req, res, next) {
   }
 
   if (req.body.opcion == 6) {
-    sorteos.forEach(item=>{
-      if (item.numero<=req.body.jugada) {
-        console.log(item.numero);
+    sorteos.forEach(item => {
+      if (item.numero <= req.body.jugada) {
+        // console.log(item.numero);
         contarProximo++;
-        if((item.resultado.includes(String(req.body.contarPoximo)))==true){
-          jugadasEntre.push((contarProximo-1))
-          contarProximo=0;
+        if ((item.resultado.includes(String(req.body.contarPoximo))) == true) {
+          jugadasEntre.push((contarProximo - 1))
+          contarProximo = 0;
         }
       }
 
@@ -221,6 +223,15 @@ exports.sorteosGet = async function(req, res, next) {
 
     console.log(jugadasEntre);
     res.send(jugadasEntre);
+  }
+
+  /*verifica que numero juega en el siguiente sorteo despues de un numero dado*/
+  if (req.body.opcion == 7) {
+    sorteos.forEach(item => {
+      resultadoSiguiente = item.resultado.split("-").map(String);
+
+    })
+    res.send("a")
   }
 
 
