@@ -35,6 +35,7 @@ exports.sorteosGet = async function(req, res, next) {
 
   var resultadoSiguiente = [];
   var contadorSiguiente = 0;
+  var asignaSiguiente;
   sorteos =
     await pg.func('trach.get_sorteos_resultados', [req.body.anio, Number(req.body.ordenar), JSON.stringify(req.body.comparar_anios)]).catch(err => {
       res.status(500).send({
@@ -139,18 +140,19 @@ exports.sorteosGet = async function(req, res, next) {
   /*Peticion
     localhost:7000/api/sorteosGet
     {
-	"opcion":6,
-	"contarC":1,
-	"contarPoximo":"33",
-	"jugada":1766,
-	"ordenarSiguiente":1,
-	"anio":2,
-	"ordenar":1,
-	"comparar_anios":{
-		      "anio1":2019,
-		      "anio2":0
-	}
-}
+    "opcion":7,
+    "contarC":1,
+    "contarPoximo":"03",
+    "posicion":0,
+    "jugada":1775,
+    "ordenarSiguiente":1,
+    "anio":1,
+    "ordenar":1,
+    "comparar_anios":{
+          "anio1":2019,
+          "anio2":0
+    }
+    }
   fin peticion*/
   if (req.body.opcion == 1) {
     if (req.body.ordenarSiguiente == 1) {
@@ -228,10 +230,18 @@ exports.sorteosGet = async function(req, res, next) {
   /*verifica que numero juega en el siguiente sorteo despues de un numero dado*/
   if (req.body.opcion == 7) {
     sorteos.forEach(item => {
-      resultadoSiguiente = item.resultado.split("-").map(String);
+
+      if (asignaSiguiente == req.body.contarPoximo) {
+        resultadoSiguiente.push(item.resultado.split("-").map(String)[req.body.posicion])
+        asignaSiguiente = 0;
+      }
+
+      if (item.resultado.split("-").map(String)[req.body.posicion] == req.body.contarPoximo) {
+        asignaSiguiente = item.resultado.split("-").map(String)[req.body.posicion];
+      }
 
     })
-    res.send("a")
+    res.send(resultadoSiguiente)
   }
 
 
