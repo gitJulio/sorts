@@ -8,7 +8,7 @@ const config = {
     port: "5432",
     database: 'trach',
     user: 'trach',
-    password: 'Pegaz0.....'
+    password: 'Axalon2019..'
   }
 };
 

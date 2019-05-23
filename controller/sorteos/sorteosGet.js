@@ -43,6 +43,7 @@ exports.sorteosGet = async function(req, res, next) {
         status: 500
       })
     })
+  console.log(req.body.anio + " - " + Number(req.body.ordenar) + " - " + JSON.stringify(req.body.comparar_anios));
 
   if (res.statusCode != 200) {
     return
@@ -55,7 +56,6 @@ exports.sorteosGet = async function(req, res, next) {
 
   var cuenta = 0;
 
-  // console.log(req.body.comparar_anios.anio2);
 
   sorteos.forEach(item => {
     cuenta++;
@@ -154,19 +154,22 @@ exports.sorteosGet = async function(req, res, next) {
     }
     }
   fin peticion*/
+
+  /*Ver los resultados ordenados */
   if (req.body.opcion == 1) {
-    if (req.body.ordenarSiguiente == 1) {
-      res.send(ver.sort(comparar));
-    } else {
-      res.send(ver);
-    }
+    // if (req.body.ordenarSiguiente == 1) {
+    //   res.send(ver.sort(comparar));
+    // } else {
+    res.send(ver);
+    // }
   }
+  /*Ver el tipo de los resultados*/
   if (req.body.opcion == 2) {
-    if (req.body.ordenarSiguiente == 1) {
-      res.send(tipo.sort(comparar));
-    } else {
-      res.send(tipo);
-    }
+    // if (req.body.ordenarSiguiente == 1) {
+    //   res.send(tipo.sort(comparar));
+    // } else {
+    res.send(tipo);
+    // }
   }
   if (req.body.opcion == 3) {
     res.send(secuencia);
@@ -229,10 +232,12 @@ exports.sorteosGet = async function(req, res, next) {
 
   /*verifica que numero juega en el siguiente sorteo despues de un numero dado*/
   if (req.body.opcion == 7) {
-    sorteos.forEach(item => {
 
+    console.log(sorteos);
+    sorteos.forEach(item => {
       if (asignaSiguiente == req.body.contarPoximo) {
         resultadoSiguiente.push(item.resultado.split("-").map(String)[req.body.posicion])
+        console.log(resultadoSiguiente);
         asignaSiguiente = 0;
       }
 
