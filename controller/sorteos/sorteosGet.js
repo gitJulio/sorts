@@ -209,7 +209,7 @@ exports.sorteosGet = async function(req, res, next) {
       sorteos
     })
   }
-
+  /*Cuenta cuantas jugadas tardo en jugar de nuevo*/
   if (req.body.opcion == 6) {
     sorteos.forEach(item => {
       if (item.numero <= req.body.jugada) {
