@@ -4,10 +4,10 @@ process.env.CADUCIDAD_TOKEN = 60 * 60 * 24 * 30;
 
 const config = {
   db: {
-    host: '35.239.128.238',
+    host: '194.135.85.154',
     port: "5432",
-    database: 'trach',
-    user: 'trach',
+    database: 'postgres',
+    user: 'jbueso',
     password: 'Axalon2019..'
   }
 };

@@ -36,14 +36,19 @@ exports.sorteosGet = async function(req, res, next) {
   var resultadoSiguiente = [];
   var contadorSiguiente = 0;
   var asignaSiguiente;
+  cuentaOrdenSorteo=0;
+  var arrayJuegoOrden=[]
   sorteos =
-    await pg.func('trach.get_sorteos_resultados', [req.body.anio, Number(req.body.ordenar), JSON.stringify(req.body.comparar_anios)]).catch(err => {
+    // await pg.func('trach.get_sorteos_resultados', [req.body.anio, Number(req.body.ordenar), JSON.stringify(req.body.comparar_anios)]).catch(err => {
+    await pg.func('loto_hn.get_sorteos_resultados', [req.body.anio]).catch(err => {
       res.status(500).send({
         error: err,
         status: 500
       })
     })
-  console.log(req.body.anio + " - " + Number(req.body.ordenar) + " - " + JSON.stringify(req.body.comparar_anios));
+  // console.log(req.body.anio + " - " + Number(req.body.ordenar) + " - " + JSON.stringify(req.body.comparar_anios));
+    
+    sorteos=sorteos[0]["get_sorteos_resultados"];
 
   if (res.statusCode != 200) {
     return
@@ -59,8 +64,10 @@ exports.sorteosGet = async function(req, res, next) {
 
   sorteos.forEach(item => {
     cuenta++;
+    cuentaOrdenSorteo++;
     arrayResultado = item.resultado.split("-").map(String);
     arrayResultado.sort(comparar);
+   
 
     arrayResultado.forEach(item2 => {
       contador++;
@@ -83,22 +90,23 @@ exports.sorteosGet = async function(req, res, next) {
       } else {
         devuelveResultadosSorteos = devuelveResultadosSorteos + '-' + item2;
       }
-
+      
       if (item2 % 2 == 1) {
         contadorImpar++;
       } else {
         contadorPar++;
       }
 
-      if (item2 < 9) {
+      if (item2 <= 9) {
+        
         secuencia1++;
       }
 
-      if (item2 > 9 && item < 20) {
+      if (item2 > 9 && item2 < 20) {
         secuencia2++;
       }
 
-      if (item2 > 19 && item < 30) {
+      if (item2 >= 19 && item2 < 30) {
         secuencia3++;
       }
 
@@ -154,7 +162,17 @@ exports.sorteosGet = async function(req, res, next) {
     }
     }
   fin peticion*/
+ if(req.body.opcion==0){
+   res.send(ver)
+   ver.forEach(juego=>{
+    juego=juego.split("-");
+    juego.sort()
 
+
+   })
+
+   res.send(ver)
+ }
   /*Ver los resultados ordenados */
   if (req.body.opcion == 1) {
     // if (req.body.ordenarSiguiente == 1) {
