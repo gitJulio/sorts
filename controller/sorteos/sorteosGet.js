@@ -39,6 +39,7 @@ exports.sorteosGet = async function(req, res, next) {
   cuentaOrdenSorteo=0;
   var arrayJuegoOrden=[]
 
+  var pruebas;
   console.log(JSON.stringify(req.body.comparar_anios))
   sorteos =
     // await pg.func('trach.get_sorteos_resultados', [req.body.anio, Number(req.body.ordenar), JSON.stringify(req.body.comparar_anios)]).catch(err => {
