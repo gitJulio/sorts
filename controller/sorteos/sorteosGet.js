@@ -38,9 +38,11 @@ exports.sorteosGet = async function(req, res, next) {
   var asignaSiguiente;
   cuentaOrdenSorteo=0;
   var arrayJuegoOrden=[]
+
+  console.log(JSON.stringify(req.body.comparar_anios))
   sorteos =
     // await pg.func('trach.get_sorteos_resultados', [req.body.anio, Number(req.body.ordenar), JSON.stringify(req.body.comparar_anios)]).catch(err => {
-    await pg.func('loto_hn.get_sorteos_resultados', [req.body.anio]).catch(err => {
+    await pg.func('loto_hn.get_sorteos_resultados', [req.body.anio,JSON.stringify(req.body.comparar_anios), req.body.ordenar]).catch(err => {
       res.status(500).send({
         error: err,
         status: 500
@@ -233,7 +235,8 @@ exports.sorteosGet = async function(req, res, next) {
   /*Cuenta cuantas jugadas tardo en jugar de nuevo*/
   if (req.body.opcion == 6) {
     sorteos.forEach(item => {
-      if (item.numero <= req.body.jugada) {
+    
+      if (item.sorteo_id <= req.body.jugada) {
         // console.log(item.numero);
         contarProximo++;
         if ((item.resultado.includes(String(req.body.contarPoximo))) == true) {
@@ -249,9 +252,9 @@ exports.sorteosGet = async function(req, res, next) {
   }
 
   /*verifica que numero juega en el siguiente sorteo despues de un numero dado*/
+  /*Busca un numero en la posicion del resultado enviado, y hace una comparacion del proximo sorteo 
+  a ver que numero jugo en esa misma posicion */
   if (req.body.opcion == 7) {
-
-    console.log(sorteos);
     sorteos.forEach(item => {
       if (asignaSiguiente == req.body.contarPoximo) {
         resultadoSiguiente.push(item.resultado.split("-").map(String)[req.body.posicion])
@@ -259,15 +262,11 @@ exports.sorteosGet = async function(req, res, next) {
         asignaSiguiente = 0;
       }
 
-      if (item.resultado.split("-").map(String)[req.body.posicion] == req.body.contarPoximo) {
+      if ((item.resultado.split("-").map(String)[req.body.posicion]) == req.body.contarPoximo) {
         asignaSiguiente = item.resultado.split("-").map(String)[req.body.posicion];
       }
 
     })
     res.send(resultadoSiguiente)
   }
-
-
-
-
 }

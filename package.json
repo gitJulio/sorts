@@ -30,7 +30,7 @@
     "lodash": "^4.17.11",
     "morgan": "^1.9.1",
     "node-html-parser": "^1.1.11",
-    "nodemon": "^1.18.4",
+    "nodemon": "^1.19.4",
     "pg-promise": "^8.4.6",
     "query-string": "^6.1.0",
     "request": "^2.88.0",
