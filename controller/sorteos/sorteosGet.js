@@ -37,7 +37,7 @@ exports.sorteosGet = async function(req, res, next) {
 
   var resultadoSiguiente = [];
   var contadorSiguiente = 0;
-  var asignaSiguiente;
+  var asignaSiguiente=0;
   cuentaOrdenSorteo=0;
   var arrayJuegoOrden=[]
 
@@ -155,15 +155,16 @@ exports.sorteosGet = async function(req, res, next) {
     {
     "opcion":7,
     "contarC":1,
-    "contarPoximo":"03",
-    "posicion":0,
+    "contarPoximo":"01",
+    "posicion":1,
     "jugada":1775,
     "ordenarSiguiente":1,
-    "anio":1,
+    "anio":2019,
     "ordenar":1,
+    "fecha":"2019-12-01",
     "comparar_anios":{
           "anio1":2019,
-          "anio2":0
+          "anio2":2020
     }
     }
   fin peticion*/
@@ -258,13 +259,14 @@ exports.sorteosGet = async function(req, res, next) {
   /*Busca un numero en la posicion del resultado enviado, y hace una comparacion del proximo sorteo 
   a ver que numero jugo en esa misma posicion */
   if (req.body.opcion == 7) {
+    
     sorteos.forEach(item => {
+       
       if (asignaSiguiente == req.body.contarPoximo) {
         resultadoSiguiente.push(item.resultado.split("-").map(String)[req.body.posicion])
-        console.log(resultadoSiguiente);
         asignaSiguiente = 0;
       }
-
+     
       if ((item.resultado.split("-").map(String)[req.body.posicion]) == req.body.contarPoximo) {
         asignaSiguiente = item.resultado.split("-").map(String)[req.body.posicion];
       }
@@ -293,11 +295,11 @@ exports.sorteosGet = async function(req, res, next) {
       if(anio_sorteo==anio_body && mes_body==mes_sorteo){
         // let fecha=moment(item.fecha).format('YYYY-MM-DD')
         console.log(item.resultado);
-        // sorteoMes.push(item.resultado)
-
+        sorteoMes.push(item.resultado)
+        // console.log(sorteoMes);
       }
 
-      // res.send(sorteoMes)
+      res.json('a')
     })
   }
 }
