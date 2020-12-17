@@ -1,8 +1,10 @@
 const pg = require('../../configuracion/ps_connection')
 const readline = require("readline");
+var moment =require('moment');
 var fs = require('fs');
 
 exports.sorteosGet = async function(req, res, next) {
+
 
   var verificaSiguiente = 0;
   var numeroSiguiente = []
@@ -269,5 +271,33 @@ exports.sorteosGet = async function(req, res, next) {
 
     })
     res.send(resultadoSiguiente)
+  }
+
+  if(req.body.opcion==8){
+    let anio_sorteo;
+    let mes_sorteo;
+    let anio_body;
+    let mes_body;
+    let sorteoMes=[]
+
+    sorteos.forEach(item=>{
+
+      anio_sorteo=moment(item.fecha).format('YYYY')
+      mes_sorteo=moment(item.fecha).format('MM')
+
+      anio_body=moment(req.body.fecha).format('YYYY')
+      mes_body=moment(req.body.fecha).format('MM')
+
+
+
+      if(anio_sorteo==anio_body && mes_body==mes_sorteo){
+        // let fecha=moment(item.fecha).format('YYYY-MM-DD')
+        console.log(item.resultado);
+        // sorteoMes.push(item.resultado)
+
+      }
+
+      // res.send(sorteoMes)
+    })
   }
 }
