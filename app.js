@@ -18,10 +18,11 @@ var cors = require('cors')
 app.use(bodyParser.json())
 
 ////Rutas
-var sorteosRouter = require('./routes/sorteos-routes')
+
+var proveedoresRouter = require('./routes/proveedores-routes')
 
 //********Ruta Principal
-app.use('/api/', cors(op), sorteosRouter)
+app.use('/api/', cors(op), proveedoresRouter)
 
 app.get('/', function(req, res) {
   res.send('Hello World')
@@ -29,5 +30,5 @@ app.get('/', function(req, res) {
 
 // app.listen(3000)
 app.listen(process.env.PORT, () => {
-  console.log("Api Sorteo Analytic");
+  console.log("Api Sorteo Analyti2c");
 })
